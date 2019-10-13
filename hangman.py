@@ -2,9 +2,15 @@ import filemanager, random
 
 def createWordList(word):
     lst = list()
-    for i in range len(word):
+    for i in range(len(word)):
         lst.append('-')
     return lst
+def modifyWordList(lst, word, letter):
+    for i in range(len(word)):
+        if word[i] == letter:
+            lst[i] = letter
+    return lst
+
 
 #Open a File Handle with the file containing all the words
 file = open('wordlist.txt', 'r')
@@ -22,6 +28,7 @@ while True:
 
         #Word the user need to guess
         word = lst[random.randint(0, len(lst) -1)].lower()
+        print(word)
 
         #Choices that are still available for the user
         choices = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
@@ -38,9 +45,35 @@ while True:
                 print('Invalid Choice')
                 print('Choices: ', choices)
                 letter = input('Enter a new letter - ').lower()
-            
 
+            index = word.find(letter)
+            if index != -1:
+                choices.remove(letter)
+                print('Correct Letter: ', letter)
 
+                wordchoices = modifyWordList(wordchoices, word, letter)
+                print(wordchoices)
+
+                if '-' not in wordchoices:
+                    print('Successfully Completed the Game !')
+                    break
+                else:
+                    print('You are still missing some letters.')
+                    continue
+
+            else:
+                choices.remove(letter)
+                print('Wrong Letter: ', letter)
+
+                wrong.append(letter)
+                print(wrong)
+
+                if len(wrong) > chances:
+                    print('Game Lost. You have ran out of chances')
+                    break;
+                else:
+                    print('You still have %d chances.' % (chances - len(wrong)))
+                    continue
 
     elif choice == 'done':
         print('Exiting the system...')
